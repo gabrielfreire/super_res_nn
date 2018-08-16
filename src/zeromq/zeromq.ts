@@ -10,6 +10,7 @@ const Status = {
 export class ZMQ {
     requesterUrl: string;
     status: string;
+    error: any;
     constructor(url) {
         const local = 'tcp://localhost';
         this.requesterUrl = url || `${process.env.URL || local}:5563`;
@@ -25,15 +26,19 @@ export class ZMQ {
         this.status = Status.UNINITIALIZED;
         return new Promise((resolve, reject) => {
             let result;
-            let timeLimit = 1000 * 5;
+            let timeLimit = 1000 * 20;
             let startTime = new Date().getTime();
-        
-            requester.send(JSON.stringify(input));
-            requester.on("message", function(reply) {
-                result = JSON.parse(reply.toString());
-                self.status = Status.SUCCESS;
-            });
-            requester.connect(this.requesterUrl);
+            try {
+                requester.send(JSON.stringify(input));
+                requester.on("message", function(reply) {
+                    result = JSON.parse(reply.toString());
+                    self.status = Status.SUCCESS;
+                });
+                requester.connect(this.requesterUrl);
+            } catch(e) {
+                self.status = Status.ERROR;
+                self.error = e;
+            }
             
             // try until its ready
             function finnish() {
@@ -44,7 +49,7 @@ export class ZMQ {
                 } else if(self.status == Status.SUCCESS){ // success
                     resolve(result);
                 } else if (self.status == Status.ERROR){ // error
-                    reject({ error: 'An error ocurred!' });
+                    reject({ error: `An error ocurred: ${self.error}` });
                 } else {
                     setTimeout(finnish, 10);
                     return;

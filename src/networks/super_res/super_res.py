@@ -1,6 +1,7 @@
 import rawpy
 import torch
 import torchvision
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
@@ -16,7 +17,8 @@ def save_pil_image(img, output_url):
   
 # Predict for local images
 def predict(model, image_url, plot=True):  
-    inp = raw_to_pil(image_url) # Pillow image
+    # inp = raw_to_pil(image_url) # Pillow image
+    inp = Image.open(image_url, mode='r')
     # img.show() # show on screen
     img_to_tensor = torchvision.transforms.ToTensor()
     # inp = Image.open('DSC_0506.NEF', mode='r')
@@ -27,7 +29,7 @@ def predict(model, image_url, plot=True):
         plt.figure(figsize=(20,20))
         plt.title('Input')
         plt.imshow(inp.convert('RGB'))
-    out = model(input.cuda())
+    out = model(input.cpu())
     out = out.cpu();
     out_img_y = out[0].detach().numpy()
     out_img_y *= 255.0
@@ -45,6 +47,8 @@ def predict(model, image_url, plot=True):
 
 def execute(image_url):
     # load model and predict
-    model = torch.load('../../../assets/models/superres/model_epoch_50.pth')
+    model = torch.load(os.getcwd() + '/assets/models/superres/model_epoch_50.pth', map_location='cpu')
+    model.eval()
     out_img = predict(model, image_url, plot=False)
+    return out_img
 
