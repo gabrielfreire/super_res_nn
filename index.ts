@@ -21,10 +21,11 @@ app.use(bodyParser.json());
 app.use(cors(options));
 app.use('/api', superResRouter);
 app.use(async (err, req, res, next) => {
+    console.log("got error", err);
     if(!err) next();
     const error: CError = await errorHandler.handleError(err);
-    const status: number = error.code;
-    if(status) { res.status(status).jsonp(error); }
+    const status: any = error.code;
+    if(status && typeof status == 'number') { res.status(status).jsonp(error); }
     else { res.jsonp(error); }
     next();
 });

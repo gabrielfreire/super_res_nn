@@ -29,12 +29,12 @@ export class ZMQ {
             let timeLimit = 1000 * 20;
             let startTime = new Date().getTime();
             try {
+                requester.connect(this.requesterUrl);
                 requester.send(JSON.stringify(input));
                 requester.on("message", function(reply) {
                     result = JSON.parse(reply.toString());
                     self.status = Status.SUCCESS;
                 });
-                requester.connect(this.requesterUrl);
             } catch(e) {
                 self.status = Status.ERROR;
                 self.error = e;
@@ -54,9 +54,9 @@ export class ZMQ {
                     setTimeout(finnish, 10);
                     return;
                 }
-                setTimeout(()=> {
-                    requester.close();
-                }, 500);
+                // setTimeout(()=> {
+                //     requester.close();
+                // }, 500);
             }
             finnish();
         });
