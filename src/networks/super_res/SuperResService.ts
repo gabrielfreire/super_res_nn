@@ -4,8 +4,8 @@ const zmq = new ZMQ(null);
 export class SuperResolutionService {
     constructor () { }
 
-    async getPrediction(imageUrl) {
-        let request = { type: 'superres', data: imageUrl };
+    async getPrediction(base64String: string) {
+        let request = { type: 'superres', data: base64String };
         try {
             let result = await zmq.exec(request);
             return result;

@@ -26,7 +26,7 @@ export class ZMQ {
         this.status = Status.UNINITIALIZED;
         return new Promise((resolve, reject) => {
             let result;
-            let timeLimit = 1000 * 20;
+            let timeLimit = 1000 * 60;
             let startTime = new Date().getTime();
             try {
                 requester.connect(this.requesterUrl);
