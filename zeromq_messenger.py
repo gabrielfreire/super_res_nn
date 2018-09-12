@@ -9,44 +9,35 @@ import path
 
 driver_processes = []
 
-responder_url = 'tcp://*:5564'
-publisher_url = 'tcp://*:5562'
-# context = zmq.Context()
-# responder
-# socket = context.socket(zmq.REP)
-# socket.bind(responder_url)
-# publisher
-# publisher = context.socket(zmq.PUB)
-# publisher.bind(publisher_url)
+pusher_url = 'tcp://*:5562'
+puller_url = 'tcp://*:5564'
 output_url = 'assets/outputImages'
 
-def worker():
-    sender_context = zmq.Context()
-    ventilator_send = sender_context.socket(zmq.PUSH)
-    ventilator_send.bind("tcp://*:5562")
-    receiver_context = zmq.Context()
-    work_receiver = receiver_context.socket(zmq.PULL)
-    work_receiver.bind("tcp://*:5564")
-    print("connected")
-    try:
+class Worker:
+    def __init__(self):
+        print("start")
+        self.sender_context = zmq.Context()
+        self.ventilator_send = self.sender_context.socket(zmq.PUSH)
+        self.ventilator_send.bind(pusher_url)
+        self.receiver_context = zmq.Context()
+        self.work_receiver = self.receiver_context.socket(zmq.PULL)
+        self.work_receiver.bind(puller_url)
+        print("connected")
         while True:
-            body = work_receiver.recv()
-            print("received")
+            body = self.work_receiver.recv()
             requestParams = json.loads(body.decode('utf-8'))
             results = {}
             if (requestParams['type'] == 'superres'):
                 results = get_prediction(str(requestParams['data']))
             
-            ventilator_send.send_string(json.dumps(results, ensure_ascii=False))
-    except Exception as e:
-        print(str(e))
-    finally:
-        ventilator_send.close()
-        work_receiver.close()
-        sender_context.term()
-        receiver_context.term()
+            self.ventilator_send.send_string(json.dumps(results, ensure_ascii=False))
     
-print("start")
+    def close_connections(self):
+        self.ventilator_send.close()
+        self.work_receiver.close()
+        self.sender_context.term()
+        self.receiver_context.term()
+    
 def get_prediction (data):
     output_img = execute(data)
     if (not os.path.exists(output_url)): 
@@ -54,8 +45,14 @@ def get_prediction (data):
     save_pil_image(output_img, output_url)
     return str(output_url)
 
-def main():
+def main(worker):
     Process(target=worker, args=()).start()
 
 if __name__ == "__main__":
-    main()
+    worker = Worker()
+    try:
+        main(worker)
+    except Exception as e:
+        print(str(e))
+    finally:
+        worker.close_connections()
