@@ -33,44 +33,47 @@ superResRouter.route("/superres/file/predict")
             const base64String: string = new Buffer(req.file.buffer).toString('base64');
             await ssService.getPrediction(base64String);
             res.status(200).sendFile(outputUrl);
-            // const url: string = req.file.path;
-            // const today = new Date();
-            // const imagePath: string = `${inputUrl}inputImage-${today.getTime()}.png`;
-            // const src: fs.ReadStream = fs.createReadStream(url);
-            // const dest: fs.WriteStream = fs.createWriteStream(imagePath);
-            // let sum: number = 0;
-            // src.pipe(dest);
-            // src.on('error', (err) => {
-            //     if(err) console.log(err);
-            // });
-            // src.on('readable', () => { 
-            //     let chunk;
-            //     while((chunk = src.read()) !== null) {
-            //         sum += chunk.length;
-            //         console.log(`Received: ${chunk.length} bytes of data`);
-            //         console.log(`Total: [${((sum/req.file.size) * 100).toFixed(2)}%] ${sum} bytes of data`);
-            //     }
-            // });
-            // src.on('end', async () => {
-            //     try {
-            //         console.log(`finished writing file on ${imagePath}`);
-            //         //remove temp file
-            //         fs.unlinkSync(url);
-            //         console.log(`removed file ${url}`);
-            //         await ssService.getPrediction(imagePath);
-            //         fs.unlinkSync(imagePath);
-            //         console.log(`removed input image ${imagePath}`);
-            //         if(!fs.existsSync(outputUrl)) { throw new CError('output.png does not exist', 404); }
-            //         res.status(200).sendFile(outputUrl);
-            //     } catch (e) {
-            //         if(fs.existsSync(imagePath)) { 
-            //             fs.unlinkSync(imagePath); 
-            //             console.log(`Removed input image ${imagePath}`);
-            //             next (e);
-            //         } else { next (e); }
-            //     }
-            // });
         } catch (error) {
             next (error);
         }
     })
+
+    // commented utilities 
+    
+    // const url: string = req.file.path;
+    // const today = new Date();
+    // const imagePath: string = `${inputUrl}inputImage-${today.getTime()}.png`;
+    // const src: fs.ReadStream = fs.createReadStream(url);
+    // const dest: fs.WriteStream = fs.createWriteStream(imagePath);
+    // let sum: number = 0;
+    // src.pipe(dest);
+    // src.on('error', (err) => {
+    //     if(err) console.log(err);
+    // });
+    // src.on('readable', () => { 
+    //     let chunk;
+    //     while((chunk = src.read()) !== null) {
+    //         sum += chunk.length;
+    //         console.log(`Received: ${chunk.length} bytes of data`);
+    //         console.log(`Total: [${((sum/req.file.size) * 100).toFixed(2)}%] ${sum} bytes of data`);
+    //     }
+    // });
+    // src.on('end', async () => {
+    //     try {
+    //         console.log(`finished writing file on ${imagePath}`);
+    //         //remove temp file
+    //         fs.unlinkSync(url);
+    //         console.log(`removed file ${url}`);
+    //         await ssService.getPrediction(imagePath);
+    //         fs.unlinkSync(imagePath);
+    //         console.log(`removed input image ${imagePath}`);
+    //         if(!fs.existsSync(outputUrl)) { throw new CError('output.png does not exist', 404); }
+    //         res.status(200).sendFile(outputUrl);
+    //     } catch (e) {
+    //         if(fs.existsSync(imagePath)) { 
+    //             fs.unlinkSync(imagePath); 
+    //             console.log(`Removed input image ${imagePath}`);
+    //             next (e);
+    //         } else { next (e); }
+    //     }
+    // });

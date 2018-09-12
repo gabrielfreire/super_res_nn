@@ -1,9 +1,9 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
-import { ErrorHandler } from './src/ErrorHandler/ErrorHandler';
-import { CError } from './src/logger/logger';
-import { superResRouter } from './src/networks/super_res/SuperResRouter';
+import { ErrorHandler } from './ErrorHandler/ErrorHandler';
+import { CError } from './logger/logger';
+import { superResRouter } from './networks/super_res/SuperResRouter';
 const errorHandler: ErrorHandler = new ErrorHandler();
 const app = express();
 //options for cors midddleware

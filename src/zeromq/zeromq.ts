@@ -1,5 +1,6 @@
 import * as zmq from 'zeromq';
-const requester = zmq.socket('req'); // data-io
+const pusher = zmq.socket('push'); // data-io
+const puller = zmq.socket('pull'); // data-io
 const subscriber = zmq.socket('sub'); // real-time
 
 const Status = {
@@ -9,11 +10,13 @@ const Status = {
 }
 export class ZMQ {
     requesterUrl: string;
+    pullerUrl: string;
     status: string;
     error: any;
     constructor(url) {
         const local = 'tcp://localhost';
-        this.requesterUrl = url || `${process.env.URL || local}:5563`;
+        this.requesterUrl = url || `${process.env.URL || local}:5564`;
+        this.pullerUrl = url || `${process.env.URL || local}:5562`;
         this.status = Status.UNINITIALIZED;
     }
 
@@ -29,9 +32,10 @@ export class ZMQ {
             let timeLimit = 1000 * 60;
             let startTime = new Date().getTime();
             try {
-                requester.connect(this.requesterUrl);
-                requester.send(JSON.stringify(input));
-                requester.on("message", function(reply) {
+                puller.connect(this.pullerUrl);
+                pusher.connect(this.requesterUrl);
+                pusher.send(JSON.stringify(input));
+                puller.on("message", function(reply) {
                     result = JSON.parse(reply.toString());
                     self.status = Status.SUCCESS;
                 });

@@ -29,7 +29,7 @@ def predict(model, image, plot=True):
     # inp = Image.open('DSC_0506.NEF', mode='r')
     inp = inp.convert('YCbCr')
     y, cb, cr = inp.split()
-    input = img_to_tensor(y).view(1, -1, y.size[1], y.size[0])
+    input = img_to_tensor(y).view(1, -1, y.size[1], y.size[0]) # view is like reshape
     print('Predicting...')
     with torch.no_grad():
         out = model(input.cpu())
