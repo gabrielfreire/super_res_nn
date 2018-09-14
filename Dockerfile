@@ -5,7 +5,8 @@ FROM node:10-alpine
 #   apt-get install -y python3 python3-dev python-pip python-virtualenv && \
 #   pip3 install --upgrade pip setuptools && \
 #   rm -rf /var/lib/apt/lists/*
-RUN apk add tini curl python python-dev python3 python3-dev \
+RUN apk update && apk upgrade \
+    && apk add tini curl python python-dev python3 python3-dev py-setuptools sudo \
     linux-headers build-base bash git ca-certificates && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
@@ -20,14 +21,14 @@ RUN apk add tini curl python python-dev python3 python3-dev \
     && echo "|--> Install Python packages" \
     && pip install -U pillow zmq \
 # Install PyTorch
-    && echo "|--> Updating" \
-    && apk update && apk upgrade \
-    && echo "|--> Install PyTorch" \
+    && echo "|--> Clone PyTorch" \
     && git clone --recursive https://github.com/pytorch/pytorch \
-    && cd pytorch && python setup.py bdist_wheel \
-    && echo "|--> Install Torch Vision" \
+    && echo "|--> Install PyTorch" \
+    && cd pytorch && python setup.py install \
+    && echo "|--> Clone Torch Vision" \
     && git clone --recursive https://github.com/pytorch/vision \
-    && cd vision && python setup.py bdist_wheel \
+    && echo "|--> Install Torch Vision" \
+    && cd vision && python setup.py install \
 ## Cleaning
     && echo "|--> Cleaning" \
     && rm -rf /pytorch \
