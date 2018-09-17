@@ -18,6 +18,7 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
+    "@types/node": "^10.10.0",
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.1",
     "cors": "^2.8.4",
