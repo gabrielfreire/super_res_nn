@@ -5,7 +5,7 @@ import threading
 from multiprocessing import Process
 import sys
 import path
-# from src.networks.super_res.super_res import execute, save_pil_image, base64_to_pil_img
+from src.networks.super_res.super_res import execute, save_pil_image, base64_to_pil_img
 
 driver_processes = []
 

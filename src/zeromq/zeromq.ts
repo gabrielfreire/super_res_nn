@@ -1,3 +1,4 @@
+declare var process;
 import * as zmq from 'zeromq';
 const pusher = zmq.socket('push'); // data-io
 const puller = zmq.socket('pull'); // data-io
@@ -13,10 +14,10 @@ export class ZMQ {
     pullerUrl: string;
     status: string;
     error: any;
-    constructor(url) {
-        const local = 'tcp://localhost';
-        this.requesterUrl = url || `${process.env.URL || local}:5564`;
-        this.pullerUrl = url || `${process.env.URL || local}:5562`;
+    constructor(_url?: string) {
+        const url = process.env.URL || 'tcp://localhost';
+        this.requesterUrl = _url || `${url}:5564`;
+        this.pullerUrl = _url || `${url}:5562`;
         this.status = Status.UNINITIALIZED;
     }
 
