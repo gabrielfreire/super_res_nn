@@ -42,7 +42,7 @@ def predict(model, image, plot=True):
         out_img_cb = cb.resize(out_img_y.size, Image.BICUBIC)
         out_img_cr = cr.resize(out_img_y.size, Image.BICUBIC)
         out_img = Image.merge('YCbCr', [out_img_y, out_img_cb, out_img_cr]).convert('RGB')
-        if(plot):
+        if (plot):
             plt.figure(figsize=(20,20))
             plt.title('Input')
             plt.imshow(inp.convert('RGB'))
@@ -69,7 +69,7 @@ def base64_to_pil_img(buff, plot=False):
     imgdata = base64.b64decode(buff)
     image = Image.open(io.BytesIO(imgdata))
     print('Got b64 to img')
-    if(plot):
+    if (plot):
         plt.figure(figsize=(20, 20))
         plt.title('Buffer')
         plt.imshow(image)
