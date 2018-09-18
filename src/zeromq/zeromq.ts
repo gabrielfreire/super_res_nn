@@ -1,4 +1,3 @@
-declare var process;
 import * as zmq from 'zeromq';
 const pusher = zmq.socket('push'); // data-io
 const puller = zmq.socket('pull'); // data-io
@@ -30,7 +29,7 @@ export class ZMQ {
         this.status = Status.UNINITIALIZED;
         return new Promise((resolve, reject) => {
             let result;
-            let timeLimit = 1000 * 60;
+            let timeLimit = (1000 * 60) * 3;
             let startTime = new Date().getTime();
             try {
                 puller.connect(this.pullerUrl);

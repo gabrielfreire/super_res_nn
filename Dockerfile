@@ -61,15 +61,25 @@ RUN conda install -y graphviz=2.38.0 \
  && conda clean -ya
 RUN pip install graphviz==0.8.4
 
+# Install ZMQ
+RUN pip install zmq
+
 # Install OpenCV3 Python bindings
 RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     libgtk2.0-0 \
+    libzmq-dev \
     libcanberra-gtk-module \
  && sudo rm -rf /var/lib/apt/lists/*
 RUN conda install -y -c menpo opencv3=3.1.0 \
  && conda clean -ya
 
-COPY package*.json ./
+# Install VIM
+RUN sudo apt-get update \
+    && sudo apt-get install apt-file \
+    && sudo apt-file update \
+    && apt-get install vim
+
+COPY package.json ./
 
 RUN npm install
 

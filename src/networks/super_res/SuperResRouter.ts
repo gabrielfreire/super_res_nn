@@ -30,7 +30,7 @@ superResRouter.route("/superres/file/predict")
     .post(upload.single( 'inputImage' ), async (req, res, next) => {
         try {
             if(!req.file) throw new CError('No file sent', 500);
-            const base64String: string = new Buffer(req.file.buffer).toString('base64');
+            const base64String: string = Buffer.from(req.file.buffer).toString('base64');
             await ssService.getPrediction(base64String);
             res.status(200).sendFile(outputUrl);
         } catch (error) {
