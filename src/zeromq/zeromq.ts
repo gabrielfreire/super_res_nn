@@ -15,6 +15,8 @@ export class ZMQ {
     error: any;
     constructor(_url?: string) {
         const url = process.env.URL || 'tcp://localhost';
+        // const url = process.env.URL || 'tcp://35.231.89.202'; /* google colab IP */
+        console.log(url);
         this.requesterUrl = _url || `${url}:5564`;
         this.pullerUrl = _url || `${url}:5562`;
         this.status = Status.UNINITIALIZED;
