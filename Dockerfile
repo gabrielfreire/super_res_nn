@@ -14,6 +14,13 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir /app
 WORKDIR /app
 
+# Copy files to the working directory
+COPY package.json ./
+
+RUN npm install
+
+COPY . .
+
  # Create a non-root user and switch to it
 RUN adduser --disabled-password --gecos '' --shell /bin/bash user \
  && chown -R user:user /app
@@ -78,12 +85,6 @@ RUN sudo apt-get update \
     && sudo apt-get install apt-file \
     && sudo apt-file update \
     && apt-get install vim
-
-COPY package.json ./
-
-RUN npm install
-
-COPY . .
 
 EXPOSE 8888
 
