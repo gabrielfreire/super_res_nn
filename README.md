@@ -1,7 +1,7 @@
 # Pytorch Super resolution NN in a NodeJS service 
 NodeJS server for super resolution CNN inference
 
-# Build
+# Build Image
 `docker-compose up`
 
 # Run
