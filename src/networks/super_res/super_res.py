@@ -9,7 +9,6 @@ import base64
 import io
 from model import SRNet
 
-
 def raw_to_pil(image_url):
     raw = rawpy.imread(image_url)
     rgb = raw.postprocess()
