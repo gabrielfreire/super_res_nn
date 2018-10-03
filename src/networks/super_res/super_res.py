@@ -32,7 +32,7 @@ def predict(model, image, plot=True):
     input = img_to_tensor(y).view(1, -1, y.size[1], y.size[0]) # view is like reshape
     print('Predicting...')
     with torch.no_grad():
-        out = model(input.cpu())
+        out = model(input.cuda())
         out = out.cpu();
         print('Done...')
         out_img_y = out[0].detach().numpy()
@@ -58,7 +58,8 @@ def execute(base64):
     # load model and predict
     upscale_factor = 3
     model = SRNet(upscale_factor=upscale_factor)
-    model.load_state_dict(torch.load(os.getcwd() + '/assets/models/superres/model_epoch_150.pth', map_location='cpu'))
+    model.load_state_dict(torch.load(os.getcwd() + '/assets/models/superres/model_epoch_150.pth'))
+    model.cuda()
     model.eval()
     image = base64_to_pil_img(base64)
     out_img = predict(model, image, plot=False)

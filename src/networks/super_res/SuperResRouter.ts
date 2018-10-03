@@ -6,7 +6,7 @@ import { SuperResolutionService } from './SuperResService';
 import { CError } from '../../logger/logger';
 import { saveImage } from '../../utils/imageUtils';
 const inputUrl = path.join(__dirname, '../../../../assets/inputImages/');
-const outputUrl = path.join(__dirname, '../../../../assets/outputImages/output.png');
+const outputUrl = path.join(__dirname, '../../../assets/outputImages/output.png');
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 // const upload = multer({ dest: inputUrl });
