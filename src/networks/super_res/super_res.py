@@ -76,3 +76,15 @@ def base64_to_pil_img(buff, plot=False):
         plt.show()
     return image
 
+def print_device_info():
+    import sys
+    print('__Python VERSION:', sys.version)
+    print('__pyTorch VERSION:', torch.__version__)
+    print('__CUDA VERSION')
+    print('__CUDNN VERSION:', torch.backends.cudnn.version())
+    print('__Number CUDA Devices:', torch.cuda.device_count())
+    print('__Devices')
+    print('Active CUDA Device: GPU', torch.cuda.current_device())
+
+    print ('Available devices ', torch.cuda.device_count())
+    print ('Current cuda device ', torch.cuda.current_device())
